@@ -14,7 +14,7 @@ A clear and concise description of the feature or task.
 
 As a [role], I want [feature] so that [benefit].
 
-**Roles:** guest, admin, customer, room_owner, car_owner, viewer
+**Roles:** guest, admin, customer, home_owner, car_owner, viewing_helper
 
 ## Acceptance Criteria
 

@@ -20,7 +20,7 @@ One user table, multiple role profiles. Admin is a separate account (Sandar's).
 | **admin**          | Sandar            | —                                  | Everything — manage clients, assign viewings/pickups, manage listings, view dashboard, approve/verify users, see all customer watchlists |
 | **registered**     | Anyone            | Self-register                      | Browse with contact info, request consultation, request roles                                                                            |
 | **customer**       | Your clients      | Request consultation → You approve | Fill in rental requirements, create personal watchlist (max 10), book viewings, request airport pickup                                   |
-| **room_owner**     | Community members | Request role → You approve         | List rooms (max 3 posts), upload photos (max 5 per listing), manage availability                                                         |
+| **home_owner**     | Community members | Request role → You approve         | List rooms (max 3 posts), upload photos (max 5 per listing), manage availability                                                         |
 | **car_owner**      | Community members | Request role → You approve         | Set availability, accept/decline pickup requests, manage vehicle info, upload license + car photos                                       |
 | **viewing_helper** | Community members | Request role → You approve         | View assigned viewing requests, update status (completed/cancelled)                                                                      |
 
@@ -30,7 +30,7 @@ One user table, multiple role profiles. Admin is a separate account (Sandar's).
 | ------------------ | ------------------------------------- | ----------------------------------------------------- |
 | **registered**     | Self-register                         | Auto-approved                                         |
 | **customer**       | Request consultation → Admin approves | Admin reviews info, accepts consultation request      |
-| **room_owner**     | Request role → Admin approves         | Requires admin approval + valid profile               |
+| **home_owner**     | Request role → Admin approves         | Requires admin approval + valid profile               |
 | **car_owner**      | Request role → Admin approves         | Requires admin approval + license upload + car photos |
 | **viewing_helper** | Request role → Admin approves         | Requires admin approval                               |
 
@@ -238,8 +238,8 @@ Viewing helper actions:
 
 | Role                  | Limit                 | Details                              |
 | --------------------- | --------------------- | ------------------------------------ |
-| **room_owner**        | Max 3 active listings | Can delete old ones to post new ones |
-| **room_owner photos** | Max 5 per listing     | Room photos, property images         |
+| **home_owner**        | Max 3 active listings | Can delete old ones to post new ones |
+| **home_owner photos** | Max 5 per listing     | Room photos, property images         |
 | **car_owner photos**  | Max 3 car photos      | Vehicle exterior/interior            |
 | **car_owner license** | Front + back required | For verification, stored in S3       |
 
@@ -260,7 +260,7 @@ users (auth.users extension)
 user_roles
   id: uuid
   user_id: uuid (FK → users)
-  role: enum('admin', 'registered', 'customer', 'room_owner', 'car_owner', 'viewing_helper')
+  role: enum('admin', 'registered', 'customer', 'home_owner', 'car_owner', 'viewing_helper')
   role_status: enum('pending', 'active', 'rejected')
   created_at: timestamptz
 
@@ -285,7 +285,7 @@ customer_children
   school_level: enum('primary', 'intermediate', 'secondary')
   created_at: timestamptz
 
-room_owner_profiles
+home_owner_profiles
   user_id: uuid (FK → users, PK)
   bio: text
   verified: boolean (default false)
@@ -327,7 +327,7 @@ availability
 ```
 room_listings
   id: uuid (PK)
-  owner_id: uuid (FK → users) — room_owner or admin
+  owner_id: uuid (FK → users) — home_owner or admin
   title: text
   description: text
 
@@ -566,7 +566,7 @@ nzsettle/
 │   └── migrations/               # SQL migration files
 │       ├── 001_users_and_roles.sql
 │       ├── 002_customer_profiles.sql    # customer_profiles + customer_children
-│       ├── 003_home_owner_profiles.sql
+│       ├── 003_home_owner_profiles.sql    # home_owner_profiles
 │       ├── 004_car_owner_profiles.sql
 │       ├── 005_listings.sql
 │       ├── 006_consultations.sql
@@ -591,7 +591,7 @@ nzsettle/
 │   │   │   │   ├── page.tsx      # Customer overview
 │   │   │   │   ├── watchlist/    # Personal watchlist (max 10)
 │   │   │   │   └── bookings/     # Bookings from watchlist
-│   │   │   ├── room-owner/       # Room owner dashboard (sees own listings only)
+│   │   │   ├── home-owner/       # Home owner dashboard (sees own listings only)
 │   │   │   ├── car-owner/        # Car owner dashboard (sees own listing only)
 │   │   │   └── viewing-helper/   # Viewing helper dashboard
 │   │   ├── consultation/
@@ -600,7 +600,7 @@ nzsettle/
 │   │   ├── rooms/
 │   │   │   ├── page.tsx          # Browse all room listings (guests can view)
 │   │   │   ├── [id]/page.tsx     # Room detail (contact hidden for guests)
-│   │   │   └── new/page.tsx      # Add room listing (room_owner/admin)
+│   │   │   └── new/page.tsx      # Add room listing (home_owner/admin)
 │   │   ├── cars/
 │   │   │   ├── page.tsx          # Browse car listings (guests can view)
 │   │   │   └── [id]/page.tsx     # Car detail (contact hidden for guests)
@@ -634,7 +634,7 @@ nzsettle/
 │   │   ├── auth/
 │   │   │   └── [...]/route.ts    # Auth callbacks
 │   │   ├── upload/
-│   │   │   ├── listing/route.ts  # Upload listing images (max 5) — room_owner, admin
+│   │   │   ├── listing/route.ts  # Upload listing images (max 5) — home_owner, admin
 │   │   │   ├── car/route.ts      # Upload car photos (max 3) — car_owner, admin
 │   │   │   └── license/route.ts  # Upload license front/back — car_owner only
 │   │   ├── listings/
@@ -694,7 +694,7 @@ All migrations go in `supabase/migrations/`. Run in order:
 
 1. `001_users_and_roles.sql` — users, user_roles, role enum
 2. `002_customer_profiles.sql` — customer_profiles, customer_children
-3. `003_room_owner_profiles.sql` — room_owner_profiles
+3. `003_home_owner_profiles.sql` — home_owner_profiles
 4. `004_car_owner_profiles.sql` — car_owner_profiles (includes license URLs, car_photos)
 5. `005_viewing_helper_profiles.sql` — viewing_helper_profiles
 6. `006_availability.sql` — availability (shared by car_owner and viewing_helper)
@@ -807,7 +807,7 @@ if (resource.owner_id !== user.id && role !== "admin") return 403;
 if (!user) return 401;
 
 // Specific roles allowed
-const allowedRoles = ["admin", "room_owner", "customer"];
+const allowedRoles = ["admin", "home_owner", "customer"];
 if (!allowedRoles.includes(role)) return 403;
 ```
 

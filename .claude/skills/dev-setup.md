@@ -84,7 +84,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 Key tables in the database:
 
 - `users` — User accounts (extends Supabase auth.users)
-- `user_roles` — Role assignments (admin, customer, room_owner, car_owner, viewer)
+- `user_roles` — Role assignments (admin, customer, home_owner, car_owner, viewing_helper)
 - `room_listings` — Room rental listings with detailed fields
 - `car_listings` — Car/driver listings
 - `availability` — Day/time availability for viewers and car owners

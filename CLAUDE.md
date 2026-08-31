@@ -25,7 +25,7 @@ A rental assistance platform for international newcomers to Auckland, NZ. Curren
 | admin | Sandar | Everything |
 | registered | Anyone | Browse with contact info, request roles |
 | customer | Your clients | Book consultation, viewings, airport pickup |
-| room_owner | Community members | List rooms (max 3), upload photos (max 5) |
+| home_owner | Community members | List rooms (max 3), upload photos (max 5) |
 | car_owner | Community members | Set availability, accept pickups, upload license |
 | viewing_helper | Community members | View assigned viewing requests |
 
@@ -124,7 +124,7 @@ When building API endpoints, ALWAYS implement:
 
 To prevent abuse:
 
-1. **User Approval** — room_owner, car_owner, viewing_helper require admin approval
+1. **User Approval** — home_owner, car_owner, viewing_helper require admin approval
 2. **Listing Approval** — All listings go through `pending_review` before going live
 3. **Image Validation** — Only `.jpg`, `.jpeg`, `.png`, `.webp` allowed, max 5MB
 4. **Manual Review** — Admin reviews all uploaded images before listing approval
@@ -161,7 +161,7 @@ export async function POST(request: Request) {
     .eq('user_id', user.id)
     .single()
   
-  if (!role || !['admin', 'room_owner'].includes(role.role)) {
+  if (!role || !['admin', 'home_owner'].includes(role.role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
   

@@ -39,4 +39,4 @@ If applicable, add screenshots to help explain your problem.
 
 ## Additional Context
 
-Add any other context about the problem here. If the bug is related to a specific user role (admin, customer, room_owner, car_owner, viewer), please mention it.
+Add any other context about the problem here. If the bug is related to a specific user role (admin, customer, home_owner, car_owner, viewing_helper), please mention it.

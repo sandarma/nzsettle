@@ -227,6 +227,6 @@ if (listing.owner_id !== user.id && role !== 'admin') return 403
 if (!user) return 401
 
 // Specific roles allowed
-const allowedRoles = ['admin', 'room_owner', 'customer']
+const allowedRoles = ['admin', 'home_owner', 'customer']
 if (!allowedRoles.includes(role)) return 403
 ```

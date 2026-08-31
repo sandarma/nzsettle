@@ -47,7 +47,7 @@ if (resource.owner_id !== user.id && role?.role !== 'admin') {
 }
 
 // Specific roles allowed
-const allowedRoles = ['admin', 'room_owner', 'customer'];
+const allowedRoles = ['admin', 'home_owner', 'customer'];
 if (!allowedRoles.includes(role?.role)) {
   return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 }
@@ -157,7 +157,7 @@ export async function POST(request: Request) {
     .eq('user_id', user.id)
     .single();
 
-  const allowedRoles = ['admin', 'room_owner'];
+  const allowedRoles = ['admin', 'home_owner'];
   if (!allowedRoles.includes(role?.role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }

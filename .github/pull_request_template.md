@@ -23,7 +23,7 @@ Describe the tests you ran to verify your changes.
 - [ ] Local development testing
 - [ ] Tested on multiple browsers (Chrome, Safari, Firefox)
 - [ ] Tested on mobile devices
-- [ ] Tested with different user roles (admin, customer, room_owner, car_owner, viewer)
+- [ ] Tested with different user roles (admin, customer, home_owner, car_owner, viewing_helper)
 - [ ] Database migration tested (if applicable)
 
 ## Checklist
