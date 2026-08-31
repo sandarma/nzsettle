@@ -1,0 +1,20 @@
+# Code Owners for nzsettle
+# Each line is a file pattern followed by one or more owners
+
+# Default owner for everything
+* @sandarma
+
+# Specific directories
+/src/app/ @sandarma
+/src/components/ @sandarma
+/src/lib/ @sandarma
+/supabase/ @sandarma
+
+# CI/CD and infrastructure
+/.github/ @sandarma
+*.yml @sandarma
+*.yaml @sandarma
+
+# Documentation
+*.md @sandarma
+/CLAUDE.md @sandarma
