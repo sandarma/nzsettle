@@ -1,8 +1,10 @@
-# Rental Platform — Architecture & Build Plan
+# NZSettle — Architecture & Build Plan
 
 ## Context
 
-Sandar currently manages rental assistance for Auckland's Burmese community manually via text files, WhatsApp, and Facebook Messenger. This platform replaces that manual workflow with a digital system, and will eventually be published for community use. MVP covers: Auth & Roles, Consultation & Booking, Listings & Viewings, Airport Pickup — all features needed for daily use.
+Sandar currently manages rental assistance for Auckland's Burmese community manually via text files, WhatsApp, and Facebook Messenger. This platform replaces that manual workflow with a digital system, and will eventually be published for community use nationwide. MVP covers: Auth & Roles, Consultation & Booking, Listings & Viewings, Airport Pickup — all features needed for daily use.
+
+**Vision:** Start in Auckland, expand to all of New Zealand. Create flexible earning opportunities for students and community members while helping newcomers find accommodation.
 
 ---
 
@@ -12,37 +14,40 @@ Sandar currently manages rental assistance for Auckland's Burmese community manu
 
 One user table, multiple role profiles. Admin is a separate account (Sandar's).
 
-| Role | Who | Can Do | Approval |
-|------|-----|--------|----------|
-| **guest** | Not logged in | Browse room listings & car listings, see testimonials, see property details (NO contact info), see general info | N/A |
-| **admin** | Sandar | Everything — manage clients, assign viewings/pickups, manage listings, view dashboard, approve/verify users, see all customer watchlists | N/A |
-| **customer** | International newcomers | Book consultation, create personal watchlist (max 10), book viewings from watchlist, request airport pickup, see contact info on bookings | ✅ Auto-approved (email verification only) |
-| **room_owner** | Community members | List rooms (max 3 posts), upload photos (max 5 per listing), manage availability | ❌ Requires admin approval |
-| **car_owner** | Community drivers | Set availability, accept/decline pickup requests, manage vehicle info, upload license + car photos | ❌ Requires admin approval + license |
-| **viewer** | Classmates / helpers (occasional) | View assigned viewing requests, update status (completed/cancelled) | ❌ Requires admin approval |
+| Role               | Who               | How They Get It                    | Can Do                                                                                                                                   |
+| ------------------ | ----------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **guest**          | Not logged in     | —                                  | Browse room listings & car listings, see testimonials, see property details (NO contact info), see general info                          |
+| **admin**          | Sandar            | —                                  | Everything — manage clients, assign viewings/pickups, manage listings, view dashboard, approve/verify users, see all customer watchlists |
+| **registered**     | Anyone            | Self-register                      | Browse with contact info, request consultation, request roles                                                                            |
+| **customer**       | Your clients      | Request consultation → You approve | Fill in rental requirements, create personal watchlist (max 10), book viewings, request airport pickup                                   |
+| **room_owner**     | Community members | Request role → You approve         | List rooms (max 3 posts), upload photos (max 5 per listing), manage availability                                                         |
+| **car_owner**      | Community members | Request role → You approve         | Set availability, accept/decline pickup requests, manage vehicle info, upload license + car photos                                       |
+| **viewing_helper** | Community members | Request role → You approve         | View assigned viewing requests, update status (completed/cancelled)                                                                      |
 
 ### User Approval System
 
-| Role | Auto-Approved? | Requires |
-|------|----------------|----------|
-| **customer** | ✅ Yes | Email verification only |
-| **room_owner** | ❌ No | Admin approval + valid profile |
-| **car_owner** | ❌ No | Admin approval + license upload + car photos |
-| **viewer** | ❌ No | Admin approval (Sandar's classmates only) |
+| Role               | How Created                           | Approval                                              |
+| ------------------ | ------------------------------------- | ----------------------------------------------------- |
+| **registered**     | Self-register                         | Auto-approved                                         |
+| **customer**       | Request consultation → Admin approves | Admin reviews info, accepts consultation request      |
+| **room_owner**     | Request role → Admin approves         | Requires admin approval + valid profile               |
+| **car_owner**      | Request role → Admin approves         | Requires admin approval + license upload + car photos |
+| **viewing_helper** | Request role → Admin approves         | Requires admin approval                               |
 
 ### Listing Approval System
 
-| Step | Action | Who |
-|------|--------|-----|
-| 1 | User creates listing | Room owner / Admin |
-| 2 | Listing status = `pending_review` | System |
-| 3 | Admin reviews listing + photos | Sandar |
-| 4 | Approved → status = `active` | Admin |
-| 5 | Rejected → status = `rejected` + feedback | Admin |
+| Step | Action                                    | Who                |
+| ---- | ----------------------------------------- | ------------------ |
+| 1    | User creates listing                      | Room owner / Admin |
+| 2    | Listing status = `pending_review`         | System             |
+| 3    | Admin reviews listing + photos            | Sandar             |
+| 4    | Approved → status = `active`              | Admin              |
+| 5    | Rejected → status = `rejected` + feedback | Admin              |
 
 ### Listing Management Rules
 
 **Room Owner / Car Owner can:**
+
 - ✅ Edit their own listings (when status is `active` or `pending_review`)
 - ✅ Delete their own listings (if no active bookings/assignments)
 - ✅ Submit new listings (up to 3 active max)
@@ -51,6 +56,7 @@ One user table, multiple role profiles. Admin is a separate account (Sandar's).
 - ✅ See all listings on the public frontend
 
 **Room Owner / Car Owner CANNOT:**
+
 - ❌ Delete listings with active bookings (viewings scheduled, pickups assigned)
 - ❌ Edit listings that are currently booked (admin override only)
 - ❌ Delete other users' listings (admin only)
@@ -58,12 +64,12 @@ One user table, multiple role profiles. Admin is a separate account (Sandar's).
 
 **Deletion Restrictions:**
 
-| Listing Type | Can Delete? | Condition |
-|--------------|-------------|-----------|
-| Room listing | ✅ Yes | No upcoming viewings scheduled |
-| Room listing | ❌ No | Has pending/assigned viewings |
-| Car profile | ✅ Yes | No active pickup assignments |
-| Car profile | ❌ No | Has assigned/en_route pickups |
+| Listing Type | Can Delete? | Condition                      |
+| ------------ | ----------- | ------------------------------ |
+| Room listing | ✅ Yes      | No upcoming viewings scheduled |
+| Room listing | ❌ No       | Has pending/assigned viewings  |
+| Car profile  | ✅ Yes      | No active pickup assignments   |
+| Car profile  | ❌ No       | Has assigned/en_route pickups  |
 
 ### Customer Watchlist
 
@@ -71,6 +77,7 @@ One user table, multiple role profiles. Admin is a separate account (Sandar's).
 A personal list of properties the customer is interested in (from TradeMe, Facebook, etc.). They manually add listing details to track what they're looking for. NOT published publicly.
 
 **Rules:**
+
 - Max 10 watchlist items per customer (configurable later)
 - Only the customer (and admin) can see their watchlist
 - No photos upload — just text fields (title, address, rent, link, notes)
@@ -87,26 +94,48 @@ customer_watchlist
   -- Property info
   title: text — listing title
   source_url: text — original listing URL (TradeMe, Facebook, etc.)
-  address: text
+
+  -- Location
+  region: text — e.g. 'Auckland'
+  district: text — e.g. 'Auckland City'
+  address: text — street address
+
+  -- Pricing
   rent_per_week: numeric
+  bond_weeks: integer — x weeks' rent
+  rent_advance_weeks: integer — x weeks' rent
+
+  -- Utilities
+  includes_power: boolean
+  includes_water: boolean
+  includes_wifi: boolean
+
+  -- Property details
   bedrooms: integer
   bathrooms: integer
-  property_type: text
+  living_rooms: integer
+  car_parking: boolean
+  property_type: text — house, apartment, unit, etc.
+  furnished: boolean
+
+  -- Availability
   available_from: date
+  available_now: boolean
 
   -- Property manager / agent info (optional, for follow-up)
-  agent_name: text — property manager or agent name
-  agent_email: text — agent contact email
-  agent_phone: text — agent contact number
+  agent_name: text — property manager or agent name (if applicable)
+  agent_email: text — agent contact email (if applicable)
+  agent_phone: text — agent contact number (if applicable)
   agency_name: text — real estate agency name (if applicable)
 
   -- Additional details
   notes: text — customer's notes about the listing
-  status: enum('interested', 'viewing_booked', 'viewed', 'shortlisted', 'rejected')
+  status: enum('interested', 'viewing_booked', 'viewed', 'application_submitted', 'shortlisted', 'rejected')
   created_at: timestamptz
 ```
 
 **Visibility:**
+
 - Customer sees: Only their own watchlist
 - Admin sees: All customer watchlists (for managing bookings)
 - Room/Car owners: Do NOT see watchlists
@@ -115,23 +144,24 @@ customer_watchlist
 
 Inspired by the Claude artifact comparison page. Key elements:
 
-| Section | Description |
-|---------|-------------|
-| **Quick Picks** | Highlight cards: Most affordable, Nearest school, Shortest commute, Best value |
-| **Comparison Grid** | Sortable table: Address, Rent/Wk, Beds/Bath, School zones, Commute times, Available date |
+| Section              | Description                                                                                      |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| **Quick Picks**      | Highlight cards: Most affordable, Nearest school, Shortest commute, Best value                   |
+| **Comparison Grid**  | Sortable table: Address, Rent/Wk, Beds/Bath, School zones, Commute times, Available date         |
 | **Property Details** | Each listing with: Title, Rent, Key features, Travel times, School info, Pros/Cons, Nearby shops |
-| **Travel Times** | Visual bars showing commute to each school + work/university |
-| **Local Area Guide** | Supermarkets, restaurants, shops, transport — applies to all listings in area |
+| **Travel Times**     | Visual bars showing commute to each school + work/university                                     |
+| **Local Area Guide** | Supermarkets, restaurants, shops, transport — applies to all listings in area                    |
 
 **Client Types:**
 
-| Type | Who | Bedrooms Needed | School Commute |
-|------|-----|-----------------|----------------|
-| Single | Student, solo worker | 1+ | Maybe (if studying) |
-| Couple | No children | 1+ | No |
-| Family | 1+ children | 2+ | Yes (per child) |
+| Type   | Who                  | Bedrooms Needed | School Commute      |
+| ------ | -------------------- | --------------- | ------------------- |
+| Single | Student, solo worker | 1+              | Maybe (if studying) |
+| Couple | No children          | 1+              | No                  |
+| Family | 1+ children          | 2+              | Yes (per child)     |
 
 **Key Fields for Analysis:**
+
 ```
 Customer profile:
 ├── Client type: single / couple / family
@@ -160,17 +190,18 @@ Each watchlist item compared on:
 ### Viewer Assignment Flow
 
 ```
-Admin assigns viewer → Status: pending
-                     → Viewer notified (wa.me + in-app)
-                     → Viewer has 24 hours to respond
+Admin assigns viewing_helper → Status: pending
+                           → Viewing helper notified (wa.me + in-app)
+                           → Viewing helper has 24 hours to respond
 
-Viewer actions:
-  → Accept → Status: accepted → Viewer sees full details
-  → Reject → Status: rejected → Admin assigns another viewer
-  → No response (24h) → Status: expired → Admin assigns another viewer
+Viewing helper actions:
+  → Accept → Status: accepted → Viewing helper sees full details
+  → Reject → Status: rejected → Admin assigns another viewing helper
+  → No response (24h) → Status: expired → Admin assigns another viewing helper
 ```
 
-**Viewer can:**
+**Viewing helper can:**
+
 - ✅ Accept assignment (sees viewing details, questions, client info)
 - ✅ Reject assignment (provides reason, admin assigns another)
 - ✅ View their schedule (accepted assignments only)
@@ -178,39 +209,39 @@ Viewer actions:
 
 ### Content Moderation
 
-| Layer | What | How |
-|-------|------|-----|
-| **File type** | Only images allowed | `.jpg`, `.jpeg`, `.png`, `.webp` |
-| **File size** | Max 5MB per image | Client + server validation |
-| **Image count** | Max 5 per listing, 3 per car | Database constraint |
-| **Manual review** | All uploaded images | Admin reviews before listing goes live |
-| **Report system** | Flag inappropriate content | Users can report, admin reviews |
+| Layer             | What                         | How                                    |
+| ----------------- | ---------------------------- | -------------------------------------- |
+| **File type**     | Only images allowed          | `.jpg`, `.jpeg`, `.png`, `.webp`       |
+| **File size**     | Max 5MB per image            | Client + server validation             |
+| **Image count**   | Max 5 per listing, 3 per car | Database constraint                    |
+| **Manual review** | All uploaded images          | Admin reviews before listing goes live |
+| **Report system** | Flag inappropriate content   | Users can report, admin reviews        |
 
 ### Guest vs Registered Access
 
-| What | Guest | Customer | Room Owner | Car Owner |
-|------|-------|----------|------------|-----------|
-| Browse room listings | ✅ | ✅ | ✅ (see all) | ✅ (see all) |
-| Browse car listings | ✅ | ✅ | ✅ (see all) | ✅ (see all) |
-| Contact owner's WhatsApp | ❌ | ✅ After booking | ✅ | ✅ |
-| Book consultation | ❌ | ✅ | ❌ | ❌ |
-| Create watchlist | ❌ | ✅ (max 10) | ❌ | ❌ |
-| Book viewing from watchlist | ❌ | ✅ | ❌ | ❌ |
-| Request airport pickup | ❌ | ✅ | ❌ | ❌ |
-| Add room listings | ❌ | ❌ | ✅ (own only in dashboard) | ❌ |
-| Add car listing | ❌ | ❌ | ❌ | ✅ (own only in dashboard) |
-| See own listings in dashboard | ❌ | ❌ | ✅ | ✅ |
-| See own watchlist | ❌ | ✅ | ❌ | ❌ |
-| See all watchlists | ❌ | ❌ | ❌ | ❌ (admin only) |
+| What                          | Guest | Customer         | Room Owner                 | Car Owner                  |
+| ----------------------------- | ----- | ---------------- | -------------------------- | -------------------------- |
+| Browse room listings          | ✅    | ✅               | ✅ (see all)               | ✅ (see all)               |
+| Browse car listings           | ✅    | ✅               | ✅ (see all)               | ✅ (see all)               |
+| Contact owner's WhatsApp      | ❌    | ✅ After booking | ✅                         | ✅                         |
+| Book consultation             | ❌    | ✅               | ❌                         | ❌                         |
+| Create watchlist              | ❌    | ✅ (max 10)      | ❌                         | ❌                         |
+| Book viewing from watchlist   | ❌    | ✅               | ❌                         | ❌                         |
+| Request airport pickup        | ❌    | ✅               | ❌                         | ❌                         |
+| Add room listings             | ❌    | ❌               | ✅ (own only in dashboard) | ❌                         |
+| Add car listing               | ❌    | ❌               | ❌                         | ✅ (own only in dashboard) |
+| See own listings in dashboard | ❌    | ❌               | ✅                         | ✅                         |
+| See own watchlist             | ❌    | ✅               | ❌                         | ❌                         |
+| See all watchlists            | ❌    | ❌               | ❌                         | ❌ (admin only)            |
 
 ### Listing Limits
 
-| Role | Limit | Details |
-|------|-------|---------|
-| **room_owner** | Max 3 active listings | Can delete old ones to post new ones |
-| **room_owner photos** | Max 5 per listing | Room photos, property images |
-| **car_owner photos** | Max 3 car photos | Vehicle exterior/interior |
-| **car_owner license** | Front + back required | For verification, stored in S3 |
+| Role                  | Limit                 | Details                              |
+| --------------------- | --------------------- | ------------------------------------ |
+| **room_owner**        | Max 3 active listings | Can delete old ones to post new ones |
+| **room_owner photos** | Max 5 per listing     | Room photos, property images         |
+| **car_owner photos**  | Max 3 car photos      | Vehicle exterior/interior            |
+| **car_owner license** | Front + back required | For verification, stored in S3       |
 
 ### User Table Schema (Supabase)
 
@@ -229,7 +260,7 @@ users (auth.users extension)
 user_roles
   id: uuid
   user_id: uuid (FK → users)
-  role: enum('admin', 'customer', 'room_owner', 'car_owner', 'viewer')
+  role: enum('admin', 'registered', 'customer', 'room_owner', 'car_owner', 'viewing_helper')
   role_status: enum('pending', 'active', 'rejected')
   created_at: timestamptz
 
@@ -274,13 +305,13 @@ car_owner_profiles
   verified: boolean (default false)
   verification_status: enum('pending', 'approved', 'rejected')
 
-viewer_profiles
+viewing_helper_profiles
   user_id: uuid (FK → users, PK)
   availability_notes: text
   bio: text
   hourly_rate: numeric
 
--- Availability table (shared by car_owner and viewer)
+-- Availability table (shared by car_owner and viewing_helper)
 availability
   id: uuid (PK)
   user_id: uuid (FK → users)
@@ -413,7 +444,7 @@ Displayed on landing page, before footer. Admin adds new screenshots by dropping
 airport_pickups
   id: uuid (PK)
   customer_id: uuid (FK → users)
-  driver_id: uuid (FK → users, nullable) — assigned later
+  car_owner_id: uuid (FK → users, nullable) — assigned later
   flight_number: text
   flight_date: date
   arrival_time: time
@@ -432,14 +463,14 @@ viewings
   id: uuid (PK)
   listing_id: uuid (FK → room_listings)
   customer_id: uuid (FK → users)
-  viewer_id: uuid (FK → users, nullable) — assigned later
+  viewing_helper_id: uuid (FK → users, nullable) — assigned later
   viewing_date: date
   viewing_time: time
   questions_for_agent: text — what to ask property manager
   notes: text — additional notes
   status: enum('requested', 'assigned', 'pending_acceptance', 'accepted', 'rejected', 'expired', 'completed', 'cancelled')
-  viewer_response: text — reason if rejected
-  viewer_responded_at: timestamptz
+  viewing_helper_response: text — reason if rejected
+  viewing_helper_responded_at: timestamptz
   assigned_at: timestamptz
   assignment_expiry: timestamptz — 24h from assignment
   created_at: timestamptz
@@ -455,7 +486,53 @@ consultations
   created_at: timestamptz
 ```
 
-**Registration Flow:** Single sign-up → create user → select role(s) → fill role-specific profile. Admin accounts created manually in Supabase dashboard (no public admin signup).
+**Registration Flow:**
+
+1. Enter email + password + full name
+2. **Email confirmation required** — system sends verification email
+3. User clicks link in email → email confirmed
+4. Account activated → becomes "Registered User"
+5. Registered users can then request roles:
+   - **Request Consultation** → Admin reviews → Becomes Customer
+   - **Request Viewing Helper Role** → Admin reviews → Can accept viewing jobs
+   - **Request Room Owner** → Admin reviews → Can list rooms
+   - **Request Car Owner** → Admin reviews → Can do airport pickups
+
+**Email Confirmation:**
+- Prevents fake email registrations
+- Ensures user has access to the email they provided
+- Supabase Auth handles this automatically
+- User cannot login until email is confirmed
+
+**Customer Journey:**
+
+```
+Person contacts you (WhatsApp/Facebook)
+→ You tell them to register on nzsettle.com
+→ They register (become Registered User)
+→ They request consultation
+→ You review their info
+→ You accept → They become Customer
+→ They fill in requirements, use watchlist, book viewings
+```
+
+**Admin Account:** Created manually in Supabase dashboard (no public signup).
+
+**Password Reset Flow:**
+
+```
+User clicks "Forgot Password"
+→ Enter email address
+→ Receive reset link via email
+→ Click link → Enter new password
+→ Password updated → Can login
+```
+
+**Implementation:**
+- Uses Supabase Auth built-in password reset
+- Email template customized with NZSettle branding
+- Link expires after 24 hours
+- Password requirements: min 8 characters
 
 ---
 
@@ -463,16 +540,16 @@ consultations
 
 ### Tech Stack
 
-| Layer | Technology | Why |
-|-------|-----------|-----|
-| Frontend | Next.js 14 (App Router) | Modern, SSR/SSG, great for portfolio |
-| Styling | Tailwind CSS + shadcn/ui | Clean, accessible, fast to build |
-| Database | Supabase (PostgreSQL) | Free tier, real-time, auth built-in |
-| Auth | Supabase Auth | Email/password, JWT, RLS policies |
-| Image Storage | AWS S3 (Free Tier: 5GB/12mo) | License docs, listing photos, car photos |
-| Hosting | Vercel | Free tier, deploys from GitHub |
-| Calendar | iCal (.ics) export | Free, universal, works with any calendar |
-| WhatsApp | wa.me deep links | Free, no API cost, pre-populated messages |
+| Layer         | Technology                   | Why                                       |
+| ------------- | ---------------------------- | ----------------------------------------- |
+| Frontend      | Next.js 14 (App Router)      | Modern, SSR/SSG, great for portfolio      |
+| Styling       | Tailwind CSS + shadcn/ui     | Clean, accessible, fast to build          |
+| Database      | Supabase (PostgreSQL)        | Free tier, real-time, auth built-in       |
+| Auth          | Supabase Auth                | Email/password, JWT, RLS policies         |
+| Image Storage | AWS S3 (Free Tier: 5GB/12mo) | License docs, listing photos, car photos  |
+| Hosting       | Vercel                       | Free tier, deploys from GitHub            |
+| Calendar      | iCal (.ics) export           | Free, universal, works with any calendar  |
+| WhatsApp      | wa.me deep links             | Free, no API cost, pre-populated messages |
 
 ### Project Structure
 
@@ -503,7 +580,9 @@ nzsettle/
 │   │   ├── (auth)/
 │   │   │   ├── login/page.tsx
 │   │   │   ├── register/page.tsx
-│   │   │   └── register/role/page.tsx
+│   │   │   ├── register/role/page.tsx
+│   │   │   ├── forgot-password/page.tsx
+│   │   │   └── reset-password/page.tsx
 │   │   ├── dashboard/
 │   │   │   ├── layout.tsx        # Dashboard layout (sidebar nav)
 │   │   │   ├── page.tsx          # Role-based redirect
@@ -514,7 +593,7 @@ nzsettle/
 │   │   │   │   └── bookings/     # Bookings from watchlist
 │   │   │   ├── room-owner/       # Room owner dashboard (sees own listings only)
 │   │   │   ├── car-owner/        # Car owner dashboard (sees own listing only)
-│   │   │   └── viewer/           # Viewer/helper dashboard
+│   │   │   └── viewing-helper/   # Viewing helper dashboard
 │   │   ├── consultation/
 │   │   │   ├── book/page.tsx     # Client booking form
 │   │   │   └── [id]/page.tsx     # Booking confirmation
@@ -617,13 +696,13 @@ All migrations go in `supabase/migrations/`. Run in order:
 2. `002_customer_profiles.sql` — customer_profiles, customer_children
 3. `003_room_owner_profiles.sql` — room_owner_profiles
 4. `004_car_owner_profiles.sql` — car_owner_profiles (includes license URLs, car_photos)
-5. `005_viewer_profiles.sql` — viewer_profiles
-6. `006_availability.sql` — availability (shared by car_owner and viewer)
+5. `005_viewing_helper_profiles.sql` — viewing_helper_profiles
+6. `006_availability.sql` — availability (shared by car_owner and viewing_helper)
 7. `007_regions_and_districts.sql` — NZ regions + districts reference data
 8. `008_room_listings.sql` — room_listings + room_listing_images (all detailed fields)
 9. `009_consultations.sql` — consultations, availability_slots
-10. `010_viewings.sql` — viewings (linked to listing + client + viewer)
-11. `011_airport_pickups.sql` — airport_pickups (linked to client + driver)
+10. `010_viewings.sql` — viewings (linked to listing + client + viewing_helper)
+11. `011_airport_pickups.sql` — airport_pickups (linked to client + car_owner)
 12. `012_notifications.sql` — in-app notifications
 13. `013_customer_watchlist.sql` — customer_watchlist (personal property tracking)
 
@@ -631,12 +710,12 @@ All migrations go in `supabase/migrations/`. Run in order:
 
 ## 5. Hosting & Deployment
 
-| Service | Tier | Purpose |
-|---------|------|---------|
-| **GitHub** | Public repo | Source control, portfolio visibility |
-| **Vercel** | Free | Next.js hosting, auto-deploys from main branch |
-| **Supabase** | Free (500MB DB, 1GB storage) | Database, auth, storage, real-time |
-| **Cloudflare** (optional) | Free | Custom domain later |
+| Service                   | Tier                         | Purpose                                        |
+| ------------------------- | ---------------------------- | ---------------------------------------------- |
+| **GitHub**                | Public repo                  | Source control, portfolio visibility           |
+| **Vercel**                | Free                         | Next.js hosting, auto-deploys from main branch |
+| **Supabase**              | Free (500MB DB, 1GB storage) | Database, auth, storage, real-time             |
+| **Cloudflare** (optional) | Free                         | Custom domain later                            |
 
 ### Environment Variables (never committed)
 
@@ -653,10 +732,31 @@ NEXT_PUBLIC_S3_BASE_URL=...      # Public S3 bucket URL for images
 ```
 
 ### .gitignore includes:
+
 - `.env.local`
 - `.env`
 - `node_modules/`
 - `.next/`
+
+### ⚠️ Security: Admin Credentials
+
+**NEVER commit admin credentials to migration SQL files.**
+
+- Admin email/password: Set in Supabase dashboard, NOT in code
+- Service role key: Only in `.env.local` (never committed)
+- All secrets: Read from environment variables at runtime
+
+**Migration files should contain:**
+- Table schemas ✅
+- Indexes ✅
+- RLS policies ✅
+- Default values ✅
+
+**Migration files should NEVER contain:**
+- Admin email/password ❌
+- API keys ❌
+- Secrets ❌
+- Hardcoded credentials ❌
 
 ---
 
@@ -664,30 +764,51 @@ NEXT_PUBLIC_S3_BASE_URL=...      # Public S3 bucket URL for images
 
 All API endpoints MUST implement:
 
-1. **Authentication** — Verify user is logged in
-2. **Authorization** — Check user role before allowing action
-3. **Input Validation** — Use zod schema for all inputs
-4. **Rate Limiting** — 100 requests/minute per user
-5. **CSRF Protection** — Supabase RLS or CSRF tokens
-6. **Error Handling** — Generic errors, don't expose internals
-7. **Logging** — Log suspicious activity
-8. **Data Ownership** — Users access only their own data (admin override)
+1. **Origin Check** — Only allow requests from your frontend domain
+2. **Authentication** — Verify user is logged in (Supabase JWT)
+3. **Authorization** — Check user role before allowing action
+4. **Input Validation** — Use zod schema for all inputs
+5. **Rate Limiting** — 100 requests/minute per user
+6. **CSRF Protection** — Supabase RLS + CSRF tokens
+7. **Error Handling** — Generic errors, don't expose internals
+8. **Logging** — Log suspicious activity
+9. **Data Ownership** — Users access only their own data (admin override)
+
+### Origin Checking (Critical)
+
+```typescript
+// middleware.ts — Block requests not from your domain
+const allowedOrigins = [
+  process.env.NEXT_PUBLIC_APP_URL,  // https://nzsettle.vercel.app
+  'http://localhost:3000'           // Development only
+];
+
+// Check Origin header on API requests
+if (!allowedOrigins.includes(origin)) {
+  return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+}
+```
+
+**Why this matters:**
+- Prevents other websites from calling your API directly
+- Blocks curl/Postman requests without proper origin
+- Protects against CSRF attacks from malicious sites
 
 ### Role-Based Access Patterns
 
 ```typescript
 // Admin only
-if (role !== 'admin') return 403
+if (role !== "admin") return 403;
 
 // Owner or admin
-if (resource.owner_id !== user.id && role !== 'admin') return 403
+if (resource.owner_id !== user.id && role !== "admin") return 403;
 
 // Any authenticated user
-if (!user) return 401
+if (!user) return 401;
 
 // Specific roles allowed
-const allowedRoles = ['admin', 'room_owner', 'customer']
-if (!allowedRoles.includes(role)) return 403
+const allowedRoles = ["admin", "room_owner", "customer"];
+if (!allowedRoles.includes(role)) return 403;
 ```
 
 ---
@@ -697,11 +818,13 @@ if (!allowedRoles.includes(role)) return 403
 All WhatsApp messaging goes through **wa.me deep links** — zero API cost, works on any phone.
 
 ### How it works:
+
 1. System generates a wa.me URL with pre-filled message
 2. User clicks the link → opens WhatsApp on their phone
 3. They review the pre-filled message → hit send
 
 ### wa.me Link Format:
+
 ```
 https://wa.me/{phone_number}?text={encoded_message}
 ```
@@ -709,6 +832,7 @@ https://wa.me/{phone_number}?text={encoded_message}
 ### Message Templates:
 
 **Consultation booked (notify admin):**
+
 ```
 📋 New Consultation Booking
 Client: {name}
@@ -718,7 +842,8 @@ Family: {size} members
 Move-in: {date}
 ```
 
-**Viewing assigned (notify viewer):**
+**Viewing assigned (notify viewing helper):**
+
 ```
 🏠 Viewing Assignment
 Property: {address}
@@ -727,7 +852,8 @@ Date: {date} at {time}
 Questions to ask: {questions}
 ```
 
-**Pickup assigned (notify driver):**
+**Pickup assigned (notify car_owner):**
+
 ```
 🚗 Airport Pickup Assignment
 Passenger: {name}
@@ -741,6 +867,7 @@ Estimated price: ${price}
 ```
 
 **Consultation confirmed (notify client):**
+
 ```
 ✅ Consultation Confirmed
 Date: {date} at {time}
@@ -753,6 +880,7 @@ Notes: {message}
 ## 8. Calendar (iCal)
 
 Each booking generates an `.ics` file for download. Contains:
+
 - Event title (e.g., "Consultation with [Client Name]")
 - Date/time with timezone (Pacific/Auckland)
 - Location or meeting link
@@ -765,35 +893,38 @@ Users add it to their phone calendar (iPhone Calendar, Google Calendar, Outlook)
 ## 9. Build Order (Delegation Split)
 
 ### Phase 1 — Foundation (Week 1-2)
-| Task | Agent | Depends On |
-|------|-------|------------|
-| Initialize Next.js + Tailwind + shadcn/ui | Claude | — |
-| Set up Supabase project + migrations | Claude | — |
-| Set up AWS S3 bucket + upload utility | Claude | — |
-| Auth flow (register, login, middleware) | Claude | Supabase |
-| Dashboard layout + role-based nav | Claude | Auth |
-| Guest access — public listing pages | Claude | Auth |
+
+| Task                                      | Agent  | Depends On |
+| ----------------------------------------- | ------ | ---------- |
+| Initialize Next.js + Tailwind + shadcn/ui | Claude | —          |
+| Set up Supabase project + migrations      | Claude | —          |
+| Set up AWS S3 bucket + upload utility     | Claude | —          |
+| Auth flow (register, login, middleware)   | Claude | Supabase   |
+| Dashboard layout + role-based nav         | Claude | Auth       |
+| Guest access — public listing pages       | Claude | Auth       |
 
 ### Phase 2 — Core Features (Week 3-5)
-| Task | Agent | Depends On |
-|------|-------|------------|
-| Client intake form + admin management | Claude | Auth |
-| Availability system + consultation booking | Claude | Auth |
-| wa.me notification utility | Claude | — |
-| iCal export utility | Claude | — |
-| Listings CRUD + browse (guest accessible) | Claude | Auth, S3 |
-| Car listings browse + detail (guest accessible) | Claude | Auth, S3 |
-| Image upload components (listing, car, license) | Claude | S3 |
-| Viewing request + assignment flow | Claude | Listings |
-| Airport pickup request + assignment | Claude | Auth |
+
+| Task                                            | Agent  | Depends On |
+| ----------------------------------------------- | ------ | ---------- |
+| Client intake form + admin management           | Claude | Auth       |
+| Availability system + consultation booking      | Claude | Auth       |
+| wa.me notification utility                      | Claude | —          |
+| iCal export utility                             | Claude | —          |
+| Listings CRUD + browse (guest accessible)       | Claude | Auth, S3   |
+| Car listings browse + detail (guest accessible) | Claude | Auth, S3   |
+| Image upload components (listing, car, license) | Claude | S3         |
+| Viewing request + assignment flow               | Claude | Listings   |
+| Airport pickup request + assignment             | Claude | Auth       |
 
 ### Phase 3 — Polish (Week 6-7)
-| Task | Agent | Depends On |
-|------|-------|------------|
+
+| Task                              | Agent  | Depends On   |
+| --------------------------------- | ------ | ------------ |
 | Admin dashboard (overview, stats) | Claude | All features |
-| In-app notifications | Claude | All features |
-| Search, filters, UX polish | Claude | All features |
-| README + portfolio documentation | Claude | All features |
+| In-app notifications              | Claude | All features |
+| Search, filters, UX polish        | Claude | All features |
+| README + portfolio documentation  | Claude | All features |
 
 ---
 
@@ -808,11 +939,13 @@ gh repo create nzsettle --public --source=. --push
 ```
 
 ### Branch Strategy:
+
 - `main` — production (Vercel auto-deploys)
 - `develop` — active development
 - Feature branches: `feature/auth`, `feature/listings`, etc.
 
 ### README.md includes:
+
 - Project description
 - Tech stack
 - How to run locally (with .env.example)
@@ -828,7 +961,7 @@ gh repo create nzsettle --public --source=. --push
 - Rating/review system
 - WhatsApp Business API integration (automated messages)
 - Mobile app (React Native)
-- Listing scraping/automation (auto-pull from TradeMe)
+- Listing scraping/automation (auto-pull from TradeMe or other agency websites)
 - Admin analytics dashboard
 - Multi-language support (Burmese, Mandarin, etc.)
 
@@ -837,6 +970,7 @@ gh repo create nzsettle --public --source=. --push
 ## 12. Verification
 
 After build, verify:
+
 1. Register a test user → select customer role → fill profile
 2. Book a consultation → check wa.me link generates correctly
 3. Admin sees the booking → assigns a viewing → wa.me link works
@@ -846,10 +980,10 @@ After build, verify:
 7. Upload 5 photos to listing → max 5 enforced
 8. Car owner uploads license front/back + 3 car photos → all stored in S3
 9. Car owner sets availability (Mon-Fri, Morning/Afternoon)
-10. Viewer sets availability (Wed-Sat, Afternoon/Evening)
+10. Viewing helper sets availability (Wed-Sat, Afternoon/Evening)
 11. Filter rooms by region → district cascading works
 12. Filter rooms by price, utilities, bathroom type, furnished, etc.
-13. Request airport pickup → see price estimate → admin assigns driver
+13. Request airport pickup → see price estimate → admin assigns car_owner
 14. Download .ics file → opens in calendar app
 15. In-app notifications appear for all events
 16. Role-based access: guest can't access admin, customer can't manage listings

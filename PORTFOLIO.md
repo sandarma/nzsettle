@@ -34,7 +34,7 @@ International newcomers to New Zealand face real barriers when finding rental ac
 
 - **Browse rental listings** aggregated from NZ rental websites
 - **Book viewing helpers** — someone to visit properties on your behalf, take photos/videos, and ask the right questions
-- **Request airport pickups** — matched with verified drivers from the community
+- **Request airport pickups** — matched with verified car owners from the community
 - **Browse available rooms** from community members
 - **Track your wishlist** and application status
 
@@ -44,39 +44,48 @@ International newcomers to New Zealand face real barriers when finding rental ac
 - **Structured viewing reports** — photos, videos, property manager Q&A
 - **Earn per viewing** (NZD 20–35 depending on location)
 
-### For Drivers
+### For Car Owners
 
 - **Register your vehicle** — car details, child seat availability, schedule
 - **Accept pickup requests** — matched based on luggage count, passengers, and distance
 - **Manage availability** and pricing
 
-### For Room Listeners
+### For Room Owners
 
 - **List available rooms** — photos, pricing, availability date
 - **Connect directly** with potential flatmates
 
 ---
 
-## 🧠 Future Vision
+## 🎯 Nationwide Vision
 
-| Phase  | Features                                                                 |
-| ------ | ------------------------------------------------------------------------ |
-| **V1** | Core platform — listings, viewing booking, airport pickup, room listings |
-| **V2** | AI rental recommendations based on preferences and budget                |
-| **V3** | Listing comparison engine with pros/cons analysis                        |
-| **V4** | Popular neighborhoods, transit info, school zones                        |
-| **V5** | Pickup price estimation, premium AI features                             |
+Starting in Auckland, expanding to all of New Zealand:
+
+| Phase | Focus |
+|-------|-------|
+| **V1** | Auckland — full features, community launch |
+| **V2** | Wellington, Christchurch — expand viewing helper/car owner network |
+| **V3** | All NZ regions — nationwide room listings |
+| **V4** | AI-powered rental matching and comparison |
+| **V5** | Community jobs platform — more earning opportunities |
+
+**Creating Opportunities:**
+- Flexible work for students (set your own hours)
+- Earn between classes with viewing/pickup jobs
+- Build reputation and profile over time
+- Community-driven trust system
 
 ---
 
 ## 💡 Technical Highlights
 
-_(To be filled as the platform is built)_
-
-- Modern web application architecture
+- Modern web application architecture (Next.js 14, TypeScript)
 - Real-time availability and booking system
-- Multi-role user system (Tenant, Viewing Helper, Driver, Room Lister)
+- Multi-role user system (Customer, Room Owner, Viewer, Driver)
 - Community-driven content and trust system
+- WhatsApp integration via wa.me deep links (free)
+- iCal export for calendar sync
+- Role-based security with Supabase RLS
 
 ---
 
@@ -85,7 +94,7 @@ _(To be filled as the platform is built)_
 - Helped **60+ Burmese community members** find accommodation in Auckland
 - Provided **20+ airport pickups** for newly arrived community members
 - Conducted **numerous property viewings** on behalf of overseas tenants
-- Built a **trusted network** of viewing helpers and airport pickup drivers
+- Built a **trusted network** of viewing helpers and car owners
 - Created a **knowledge base** of NZ rental tips, process guidance, and property insights
 
 ---

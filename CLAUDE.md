@@ -23,10 +23,11 @@ A rental assistance platform for international newcomers to Auckland, NZ. Curren
 |------|-----|--------|
 | guest | Not logged in | Browse room + car listings (NO contact info) |
 | admin | Sandar | Everything |
-| customer | Newcomers | Book consultation, viewings, airport pickup |
+| registered | Anyone | Browse with contact info, request roles |
+| customer | Your clients | Book consultation, viewings, airport pickup |
 | room_owner | Community members | List rooms (max 3), upload photos (max 5) |
-| car_owner | Drivers | Set availability, accept pickups, upload license |
-| viewer | Classmates/helpers | View assigned viewing requests |
+| car_owner | Community members | Set availability, accept pickups, upload license |
+| viewing_helper | Community members | View assigned viewing requests |
 
 **Multi-role:** One user table, separate role profiles. Admin is separate. Others can combine.
 
@@ -35,9 +36,9 @@ A rental assistance platform for international newcomers to Auckland, NZ. Curren
 1. **Room Listings** — Detailed fields: region/district, rent/week, utilities, bathroom, flatmate prefs, facilities, school zones
 2. **Car Listings** — Vehicle info, capacity, child seat, license verification
 3. **Consultation Booking** — Client intake → book consultation → then viewings unlock
-4. **Viewing Assignment** — Admin assigns viewer, wa.me notification with pre-filled details
-5. **Airport Pickup** — Client requests → admin assigns driver, price estimate
-6. **Availability System** — Viewer + car_owner set day/time slots (Mon-Sun × Morning/Afternoon/Evening)
+4. **Viewing Assignment** — Admin assigns viewing_helper, wa.me notification with pre-filled details
+5. **Airport Pickup** — Client requests → admin assigns car_owner, price estimate
+6. **Availability System** — viewing_helper + car_owner set day/time slots (Mon-Sun × Morning/Afternoon/Evening)
 7. **Guest Access** — Public can browse listings, contact info hidden until registered
 8. **iCal Export** — .ics files for all bookings
 9. **In-app Notifications** — Bell icon, unread count
@@ -46,8 +47,8 @@ A rental assistance platform for international newcomers to Auckland, NZ. Curren
 
 All notifications use wa.me deep links (free, no API). System generates pre-filled messages:
 - Consultation booked → notify admin
-- Viewing assigned → notify viewer with property details
-- Pickup assigned → notify driver with passenger details
+- Viewing assigned → notify viewing_helper with property details
+- Pickup assigned → notify car_owner with passenger details
 - Consultation confirmed → notify client with meeting link
 
 ## Room Listing Fields
@@ -123,7 +124,7 @@ When building API endpoints, ALWAYS implement:
 
 To prevent abuse:
 
-1. **User Approval** — room_owner, car_owner, viewer require admin approval
+1. **User Approval** — room_owner, car_owner, viewing_helper require admin approval
 2. **Listing Approval** — All listings go through `pending_review` before going live
 3. **Image Validation** — Only `.jpg`, `.jpeg`, `.png`, `.webp` allowed, max 5MB
 4. **Manual Review** — Admin reviews all uploaded images before listing approval
