@@ -91,11 +91,12 @@ Starting in Auckland, expanding to all of New Zealand:
 
 ## 🌍 Impact
 
-- Helped **60+ Burmese community members** find accommodation in Auckland
-- Provided **20+ airport pickups** for newly arrived community members
-- Conducted **numerous property viewings** on behalf of overseas tenants
-- Built a **trusted network** of viewing helpers and car owners
-- Created a **knowledge base** of NZ rental tips, process guidance, and property insights
+- Provided **60+ rental services** for newly arrived newcomers in Auckland
+- Provided **20+ airport pickups** for newly arrived newcomers
+- Created flexible income for **5+ viewing helpers**
+- Created flexible income for **5+ car owners**
+- Created flexible income for **5+ home owners**
+- Creating **flexible earning opportunities for students**
 
 ---
 

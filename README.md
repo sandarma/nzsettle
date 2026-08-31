@@ -145,10 +145,12 @@ nzsettle/
 
 ## 🌍 Impact
 
-- **60+** community members helped find accommodation in Auckland
-- **20+** airport pickups provided
-- Creating flexible earning opportunities for students
-- Building a trusted community network across NZ
+- **60+** rental services provided for newly arrived newcomers
+- **20+** airport pickups for newly arrived newcomers
+- **5+** viewing helpers earning flexible income
+- **5+** car owners earning flexible income
+- **5+** home owners earning flexible income
+- Creating **flexible earning opportunities for students**
 
 ## 📝 License
 
