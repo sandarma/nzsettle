@@ -2,6 +2,10 @@
 
 A rental assistance platform for international newcomers to New Zealand — helping immigrant communities find accommodation, arrange property viewings, and organize airport pickups across NZ.
 
+![ci](../../actions/workflows/ci.yml/badge.svg) ![security](../../actions/workflows/security.yml/badge.svg)
+
+<!-- A screenshot or GIF of the app goes here — it's the best README section. -->
+
 ## 🎯 The Problem
 
 Finding rental accommodation in New Zealand is challenging for newcomers:
@@ -18,6 +22,7 @@ Finding rental accommodation in New Zealand is challenging for newcomers:
 NZSettle digitizes the manual process I've been running for 2+ years in Auckland — and opens it up nationwide.
 
 **For Newcomers:**
+
 - Browse room listings from community members across NZ
 - Book consultation to understand your needs
 - Arrange property viewings with local viewing helpers
@@ -25,12 +30,14 @@ NZSettle digitizes the manual process I've been running for 2+ years in Auckland
 - Track properties you're interested in
 
 **For Community Members:**
+
 - Earn income by helping newcomers — viewings, pickups
 - Set your own availability and schedule
 - Flexible work for students and part-timers
 - Build your profile and reputation
 
 **For Room Owners:**
+
 - List available rooms to a trusted community
 - Connect directly with potential flatmates
 - Simple listing process with photos
@@ -39,12 +46,12 @@ NZSettle digitizes the manual process I've been running for 2+ years in Auckland
 
 While starting in Auckland, NZSettle is designed for all of New Zealand:
 
-| Region | Coverage |
-|--------|----------|
-| Auckland | ✅ Full coverage |
-| Wellington | 🔄 Expanding |
-| Christchurch | 🔄 Expanding |
-| Hamilton | 🔄 Coming soon |
+| Region         | Coverage          |
+| -------------- | ----------------- |
+| Auckland       | ✅ Full coverage  |
+| Wellington     | 🔄 Expanding      |
+| Christchurch   | 🔄 Expanding      |
+| Hamilton       | 🔄 Coming soon    |
 | All NZ regions | 🎯 Long-term goal |
 
 **Room listings** cover all regions. **Viewing helpers and car owners** can register from anywhere — we match based on location and availability.
@@ -58,6 +65,7 @@ NZSettle creates flexible earning opportunities for:
 - **Community members** — Help newcomers while earning
 
 **How it works:**
+
 1. Register as a Viewer or Driver
 2. Set your availability (days + times)
 3. Get notified when jobs match your schedule
@@ -106,14 +114,14 @@ npm run dev
 
 See `.env.example` for required variables:
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key |
-| `AWS_ACCESS_KEY_ID` | AWS access key |
-| `AWS_SECRET_ACCESS_KEY` | AWS secret key |
-| `S3_BUCKET_NAME` | S3 bucket for images |
+| Variable                        | Description               |
+| ------------------------------- | ------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Your Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key    |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Supabase service role key |
+| `AWS_ACCESS_KEY_ID`             | AWS access key            |
+| `AWS_SECRET_ACCESS_KEY`         | AWS secret key            |
+| `S3_BUCKET_NAME`                | S3 bucket for images      |
 
 ## 📁 Project Structure
 
@@ -135,13 +143,13 @@ nzsettle/
 
 ## 🎯 User Roles
 
-| Role | What They Do |
-|------|--------------|
-| **Customer** | Browse listings, book viewings, request pickups |
-| **Room Owner** | List rooms, connect with potential flatmates |
-| **Viewing Helper** | View properties on behalf of customers |
-| **Car Owner** | Provide airport pickups |
-| **Admin** | Manage platform, verify users, moderate content |
+| Role               | What They Do                                    |
+| ------------------ | ----------------------------------------------- |
+| **Customer**       | Browse listings, book viewings, request pickups |
+| **Room Owner**     | List rooms, connect with potential flatmates    |
+| **Viewing Helper** | View properties on behalf of customers          |
+| **Car Owner**      | Provide airport pickups                         |
+| **Admin**          | Manage platform, verify users, moderate content |
 
 ## 🌍 Impact
 
@@ -152,9 +160,18 @@ nzsettle/
 - **5+** home owners earning flexible income
 - Creating **flexible earning opportunities for students**
 
+## Author
+
+**Sandar Min Aye**
+
+- GitHub: [@sandarma](https://github.com/sandarma)
+- LinkedIn: [Sandar Min Aye](https://www.linkedin.com/in/sandar-min-aye/)
+
+---
+
 ## 📝 License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
