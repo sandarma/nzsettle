@@ -1,6 +1,6 @@
 # NZSettle 🏠
 
-A rental assistance platform for international newcomers to New Zealand — helping immigrant communities find accommodation, arrange property viewings, and organize airport pickups across NZ.
+An assistance platform for international newcomers to New Zealand — helping immigrant communities find accommodation, arrange property viewings, and organize airport pickups across NZ.
 
 ![ci](../../actions/workflows/ci.yml/badge.svg) ![security](../../actions/workflows/security.yml/badge.svg)
 
@@ -175,4 +175,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Built with ❤️ by [Sandar](https://github.com/sandarma) for the Burmese community in Auckland — and now all newcomers to New Zealand.
+Built by [Sandar Min Aye](https://github.com/sandarma) for the Burmese community in Auckland — and now all newcomers to New Zealand.

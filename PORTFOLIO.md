@@ -1,4 +1,4 @@
-# 🏠 NZSettle — Rental Assistance Platform for Newcomers to New Zealand
+# 🏠 NZSettle — An Assistance Platform for Newcomers to New Zealand
 
 > **Built by Sandar** | AUT Master's Student (Computer & Information Sciences) | Auckland, NZ
 
@@ -61,15 +61,16 @@ International newcomers to New Zealand face real barriers when finding rental ac
 
 Starting in Auckland, expanding to all of New Zealand:
 
-| Phase | Focus |
-|-------|-------|
-| **V1** | Auckland — full features, community launch |
+| Phase  | Focus                                                              |
+| ------ | ------------------------------------------------------------------ |
+| **V1** | Auckland — full features, community launch                         |
 | **V2** | Wellington, Christchurch — expand viewing helper/car owner network |
-| **V3** | All NZ regions — nationwide room listings |
-| **V4** | AI-powered rental matching and comparison |
-| **V5** | Community jobs platform — more earning opportunities |
+| **V3** | All NZ regions — nationwide room listings                          |
+| **V4** | AI-powered rental matching and comparison                          |
+| **V5** | Community jobs platform — more earning opportunities               |
 
 **Creating Opportunities:**
+
 - Flexible work for students (set your own hours)
 - Earn between classes with viewing/pickup jobs
 - Build reputation and profile over time
